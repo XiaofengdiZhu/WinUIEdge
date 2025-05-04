@@ -343,13 +343,13 @@ namespace Edge
         {
             Deferral deferral = args.GetDeferral();
 
-            System.Threading.SynchronizationContext.Current.Post((_) =>
+            System.Threading.SynchronizationContext.Current?.Post(async (_) =>
             {
                 using (deferral)
                 {
                     args.Handled = true;
-                    string file = Utilities.Win32SaveFile(args.ResultFilePath, this.GetWindowHandle());
-                    if (file != null)
+                    string file = await Utilities.WSPSaveFile(Path.GetFileName(args.ResultFilePath), this.GetWindowHandle());
+                    if (file is { Length: > 0 })
                     {
                         args.ResultFilePath = file;
                         App.DownloadList.Add(new DownloadObject(args.DownloadOperation));

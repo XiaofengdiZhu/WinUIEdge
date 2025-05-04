@@ -76,16 +76,14 @@ namespace Edge
 
         public static async void ExtensionsAddAsync(object sender)
         {
-            var senderButton = sender as Button;
+            Button senderButton = sender as Button;
             if (senderButton == null)
             {
                 return;
             }
             senderButton.IsEnabled = false;
             FolderPicker openPicker = new();
-            MainWindow window = App.GetWindowForElement(senderButton);
-            IntPtr hWnd = WinRT.Interop.WindowNative.GetWindowHandle(window);
-            WinRT.Interop.InitializeWithWindow.Initialize(openPicker, hWnd);
+            WinRT.Interop.InitializeWithWindow.Initialize(openPicker, senderButton.GetWindowHandle());
             openPicker.FileTypeFilter.Add("*");
             openPicker.SuggestedStartLocation = PickerLocationId.ComputerFolder;
             StorageFolder folder = await openPicker.PickSingleFolderAsync();
@@ -95,7 +93,8 @@ namespace Edge
                 {
                     CoreWebView2BrowserExtension extension = await App.CoreWebView2Profile.AddBrowserExtensionAsync(folder.Path);
                     string optionUriSuffix = ExtensionOptionUriSuffixes.GetValueOrDefault(extension.Name, null);
-                    Extensions.Add(new ExtensionInfo() {
+                    Extensions.Add(new ExtensionInfo()
+                    {
                         Name = extension.Name,
                         Id = extension.Id,
                         IsEnabled = extension.IsEnabled,

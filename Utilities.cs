@@ -13,6 +13,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
@@ -111,6 +112,20 @@ namespace Edge
                 return pwFileName.ToString();
             }
             catch (Exception) { return string.Empty; }
+        }
+
+        public static async Task<string> WSPSaveFile(string fileName, IntPtr hwnd)
+        {
+            FileSavePicker savePicker = new ()
+            {
+                SuggestedStartLocation = PickerLocationId.Downloads,
+                SuggestedFileName = fileName
+            };
+            WinRT.Interop.InitializeWithWindow.Initialize(savePicker, hwnd);
+            string extension = Path.GetExtension(fileName);
+            savePicker.FileTypeChoices.Add(extension, [extension]);
+            StorageFile file = await savePicker.PickSaveFileAsync();
+            return file != null ? file.Path : string.Empty;
         }
 
         public static string ToGlyph(this string name)
