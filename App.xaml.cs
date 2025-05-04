@@ -20,7 +20,6 @@ namespace Edge
         public static List<MainWindow> mainWindows = [];
         public static Settings settings;
         public static WebView2 WebView2;
-        public static CoreWebView2 CoreWebView2;
         public static CoreWebView2Environment CoreWebView2Environment;
         public static CoreWebView2Profile CoreWebView2Profile;
         public static ObservableCollection<WebViewHistory> Histories = [];
@@ -57,13 +56,12 @@ namespace Edge
             CoreWebView2Environment.BrowserProcessExited += BrowserProcessExited;
             WebView2 = new WebView2();
             await WebView2.EnsureCoreWebView2Async(CoreWebView2Environment);
-            CoreWebView2 = WebView2.CoreWebView2;
-            CoreWebView2Profile = CoreWebView2.Profile;
+            CoreWebView2Profile = WebView2.CoreWebView2.Profile;
+            CoreWebView2Profile.PreferredTrackingPreventionLevel = (CoreWebView2TrackingPreventionLevel)App.settings.PreferredTrackingPreventionLevel;
         }
 
         private void BrowserProcessExited(CoreWebView2Environment sender, CoreWebView2BrowserProcessExitedEventArgs args)
         {
-            Console.WriteLine($"Browser process exited with exit code {args.BrowserProcessExitKind}");
             if (NeedRestartEnvironment)
             {
                 NeedRestartEnvironment = false;
@@ -74,13 +72,14 @@ namespace Edge
         public static MainWindow CreateNewWindow()
         {
             MainWindow window = new();
-            window.Closed += (sender, e) =>
+            window.Closed += async (sender, e) =>
             {
                 mainWindows.Remove(window);
                 if (mainWindows.Count == 0)
                 {
                     NeedRestartEnvironment = false;
-                    File.WriteAllText("./settings.json", JsonSerializer.Serialize(settings, JsonContext.Default.Settings));
+                    await File.WriteAllTextAsync("./settings.json", JsonSerializer.Serialize(settings, JsonContext.Default.Settings));
+                    await Utilities.ClearBrowsingData();
                 }
                 else if (NeedRestartEnvironment && !AnyWebviewPageExists())
                 {

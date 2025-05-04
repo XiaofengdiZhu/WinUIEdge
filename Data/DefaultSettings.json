@@ -13,6 +13,9 @@
     "DisableGpu": false,
     "DisableBackgroundTimerThrottling": false,
     "InjectExtensionsStore": true,
+    "Smartscreen": true,
+    "PreferredTrackingPreventionLevel": 2,
+    "ClearBrowsingDataKindsOnExit": 0,
     "ToolBar": {
         "HomeButton": false,
         "ForwardButton": true,

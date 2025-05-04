@@ -66,6 +66,7 @@ namespace Edge
                 coreWebView2.WindowCloseRequested += CoreWebView2_WindowCloseRequested;
                 coreWebView2.Settings.IsStatusBarEnabled = false;
                 coreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
+                coreWebView2.Settings.IsReputationCheckingRequired = App.settings.Smartscreen;
             }
             if (WebUri != null && WebUri != WebView.Source)
             {

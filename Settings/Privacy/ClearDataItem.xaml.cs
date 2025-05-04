@@ -29,18 +29,26 @@ namespace Edge
         public ClearDataItem()
         {
             this.InitializeComponent();
+            foreach (BrowserDataKind item in BrowserDataKindList)
+            {
+                item.IsChecked = (App.settings.ClearBrowsingDataKindsOnExit & (int)item.Kind) == (int)item.Kind;
+            }
         }
 
         private async void ClearBrowsingData(object sender, RoutedEventArgs e)
         {
-            foreach (var item in ClearBrowsingDataButton.ItemsSource as List<BrowserDataKind>)
+            await Utilities.ClearBrowsingData();
+            ClearBrowsingDataButton.Description = "已清理选择的项目";
+        }
+
+        void ToggleSwitch_OnToggled(object sender, RoutedEventArgs e)
+        {
+            if (sender is ToggleSwitch { DataContext: BrowserDataKind kind } toggleSwitch)
             {
-                if (item.IsChecked)
-                {
-                    await App.CoreWebView2Profile.ClearBrowsingDataAsync(item.Kind);
+                if ((App.settings.ClearBrowsingDataKindsOnExit & (int)kind.Kind) != (toggleSwitch.IsOn ? (int)kind.Kind : 0)) {
+                    App.settings.ClearBrowsingDataKindsOnExit ^= (int)kind.Kind;
                 }
             }
-            ClearBrowsingDataButton.Description = "已清理选择的项目";
         }
     }
 }

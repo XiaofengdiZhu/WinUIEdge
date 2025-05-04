@@ -19,6 +19,7 @@ using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
 using Windows.Win32.UI.Shell;
 using Windows.Win32.UI.Shell.Common;
+using Microsoft.Web.WebView2.Core;
 
 namespace Edge
 {
@@ -221,6 +222,21 @@ namespace Edge
             else
             {
                 mainWindow.AddNewTab(new WebViewPage(uri));
+            }
+        }
+
+        public static async Task ClearBrowsingData()
+        {
+            if (App.settings.ClearBrowsingDataKindsOnExit == 0)
+            {
+                return;
+            }
+            for (int i = 0; i < 16; i++)
+            {
+                if (((App.settings.ClearBrowsingDataKindsOnExit >> i) & 1) == 1)
+                {
+                    await App.CoreWebView2Profile.ClearBrowsingDataAsync((CoreWebView2BrowsingDataKinds)(1 << i));
+                }
             }
         }
     }

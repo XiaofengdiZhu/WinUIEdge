@@ -8,7 +8,7 @@ namespace Edge
 {
     public sealed partial class TrackItem : Page
     {
-        public List<string> tracks = ["None", "基本", "平衡（推荐）", "严格"];
+        public List<string> tracks = ["关闭", "基本", "平衡（推荐）", "严格"];
 
         public List<CoreWebView2TrackingPreventionLevel> trackLevelList = [.. Enum.GetValues<CoreWebView2TrackingPreventionLevel>()];
 
@@ -16,14 +16,16 @@ namespace Edge
         {
             this.InitializeComponent();
             trackBox.ItemsSource = tracks;
-
-            var level = App.CoreWebView2Profile.PreferredTrackingPreventionLevel;
-            trackBox.SelectedIndex = trackLevelList.IndexOf(level);
+            trackBox.SelectedIndex = App.settings.PreferredTrackingPreventionLevel;
         }
 
         private void TrackLevelChanged(object sender, SelectionChangedEventArgs e)
         {
-            App.CoreWebView2Profile.PreferredTrackingPreventionLevel = trackLevelList[trackBox.SelectedIndex];
+            if (trackBox.SelectedIndex != App.settings.PreferredTrackingPreventionLevel)
+            {
+                App.settings.PreferredTrackingPreventionLevel = trackBox.SelectedIndex;
+                App.CoreWebView2Profile.PreferredTrackingPreventionLevel = trackLevelList[trackBox.SelectedIndex];
+            }
         }
     }
 }

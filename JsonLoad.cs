@@ -30,6 +30,9 @@ namespace Edge
         public bool DisableGpu { get; set; }
         public bool DisableBackgroundTimerThrottling { get; set; }
         public bool InjectExtensionsStore { get; set; }
+        public bool Smartscreen { get; set; }
+        public int PreferredTrackingPreventionLevel { get; set; }
+        public int ClearBrowsingDataKindsOnExit { get; set; }
         public Dictionary<string, bool> ToolBar { get; set; }
     }
 

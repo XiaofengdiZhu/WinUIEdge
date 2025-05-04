@@ -8,12 +8,26 @@ namespace Edge
         public SafetyItem()
         {
             this.InitializeComponent();
-            msSmartScreen.IsOn = App.CoreWebView2.Settings.IsReputationCheckingRequired;
+            msSmartScreen.IsOn = App.settings.Smartscreen;
         }
 
         private void SmartScreenChanged(object sender, RoutedEventArgs e)
         {
-            App.CoreWebView2.Settings.IsReputationCheckingRequired = (sender as ToggleSwitch).IsOn;
+            bool isOn = (sender as ToggleSwitch)?.IsOn ?? false;
+            if (isOn != App.settings.Smartscreen)
+            {
+                App.settings.Smartscreen = isOn;
+                foreach (MainWindow window in App.mainWindows)
+                {
+                    foreach (object tabItem in window.TabView.TabItems)
+                    {
+                        if (tabItem is TabViewItem { Content: WebViewPage webViewPage })
+                        {
+                            webViewPage.WebView2.CoreWebView2.Settings.IsReputationCheckingRequired = isOn;
+                        }
+                    }
+                }
+            }
         }
     }
 }
