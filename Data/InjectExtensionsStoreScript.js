@@ -48,7 +48,11 @@ function findInstallButtons(element) {
 function replaceButton(originalInstallButton){
     const installAnchorElement = document.createElement("a");
     installAnchorElement.href = `https://edge.microsoft.com/extensionwebstorebase/v1/crx?response=redirect&x=id%3D${originalInstallButton.id.slice(14)}%26installsource%3Dondemand`;
-    installAnchorElement.innerText = originalInstallButton.firstElementChild?.innerText ?? "获取";
+    let innerText = originalInstallButton.firstElementChild?.innerText?.trim();
+    if(!innerText || innerText.length === 0){
+        innerText = "获取";
+    }
+    installAnchorElement.innerText = innerText;
     installAnchorElement.download;
     originalInstallButton.classList.add("replacedInstallButton");
     originalInstallButton.removeChild(originalInstallButton.firstElementChild);

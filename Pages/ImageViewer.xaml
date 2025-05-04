@@ -98,6 +98,9 @@
 
                         <MenuFlyoutItem Text="复制为路径" Click="CopyFilePath">
 
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xe71B;"/>
+                            </MenuFlyoutItem.Icon>
                             <MenuFlyoutItem.KeyboardAccelerators>
                                 <KeyboardAccelerator Key="C" Modifiers="Control,Shift"/>
                             </MenuFlyoutItem.KeyboardAccelerators>
@@ -119,6 +122,9 @@
                             </MenuFlyoutItem>
 
                             <MenuFlyoutItem Text="背景" Click="SetImageAsWallpaper">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xe7f9;"/>
+                                </MenuFlyoutItem.Icon>
 
                                 <MenuFlyoutItem.KeyboardAccelerators>
                                     <KeyboardAccelerator Key="B" Modifiers="Control"/>
@@ -126,7 +132,11 @@
                             </MenuFlyoutItem>
                         </MenuFlyoutSubItem>
 
-                        <MenuFlyoutItem Text="调整图像大小"/>
+                        <MenuFlyoutItem Text="调整图像大小">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xEE49;"/>
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
 
                         <MenuFlyoutSeparator />
 

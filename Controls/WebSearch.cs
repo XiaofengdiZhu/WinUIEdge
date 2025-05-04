@@ -4,6 +4,8 @@ using System;
 using System.IO;
 using System.Linq;
 using Windows.Foundation;
+using Windows.UI;
+using SolidColorBrush = Microsoft.UI.Xaml.Media.SolidColorBrush;
 
 namespace Edge
 {
@@ -22,9 +24,10 @@ namespace Edge
         {
             base.OnApplyTemplate();
             autoSuggestBox = GetTemplateChild("AutoSuggestBox") as AutoSuggestBox;
-            autoSuggestBox.TextChanged += AutoSuggestBox_TextChanged;
+            autoSuggestBox!.TextChanged += AutoSuggestBox_TextChanged;
             autoSuggestBox.SuggestionChosen += AutoSuggestBox_SuggestionChosen;
             autoSuggestBox.QuerySubmitted += AutoSuggestBox_QuerySubmitted;
+            autoSuggestBox.QueryIcon = new SymbolIcon(Symbol.Favorite){ Foreground = new SolidColorBrush(Color.FromArgb(0,0,0,0))};
         }
 
         public string Text

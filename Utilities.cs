@@ -120,7 +120,7 @@ namespace Edge
             FileSavePicker savePicker = new ()
             {
                 SuggestedStartLocation = PickerLocationId.Downloads,
-                SuggestedFileName = fileName
+                SuggestedFileName = Path.GetFileName(fileName)
             };
             WinRT.Interop.InitializeWithWindow.Initialize(savePicker, hwnd);
             string extension = Path.GetExtension(fileName);
@@ -147,6 +147,8 @@ namespace Edge
                 "paste" => "\ue77f",
                 "openLinkInNewWindow" => "\ue737",
                 "copyLinkLocation" => "\ue71b",
+                "webCapture" => "\uf406",
+                "inspectElement" => "\uf8a5",
                 _ => string.Empty,
             };
         }

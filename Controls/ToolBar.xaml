@@ -59,8 +59,8 @@
         <local:IconButton
             x:Name="SplitButton"
             TipText="分屏"
-            IconGlyph="&#xe736;"
-            ButtonClicked="SplitWindow" /><!--ReadingMode Icon-->
+            IconGlyph="&#xf57c;"
+            ButtonClicked="SplitWindow" />
 
         <local:ToolButton
             x:Name="FavoriteButton"

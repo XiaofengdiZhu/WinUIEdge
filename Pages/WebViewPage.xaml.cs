@@ -30,7 +30,14 @@ namespace Edge
         {
             InitializeComponent();
             InitializeToolbarVisibility();
-            Loaded += (sender, args) => InitializeWebView2Async(WebViewEngine, WebUri);
+            bool loaded = false;
+            Loaded += (sender, args) => {
+                if (!loaded)
+                {
+                    loaded = true;
+                    InitializeWebView2Async(WebViewEngine, WebUri);
+                }
+            };
 
             favoriteList.Visibility = App.settings.MenuStatus == "Always" ? Visibility.Visible : Visibility.Collapsed;
         }
@@ -68,7 +75,7 @@ namespace Edge
                 coreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
                 coreWebView2.Settings.IsReputationCheckingRequired = App.settings.Smartscreen;
             }
-            if (WebUri != null && WebUri != WebView.Source)
+            if (WebUri != null && !WebUri.Equals(WebView.Source))
             {
                 WebView.Source = WebUri;
             }
@@ -342,6 +349,7 @@ namespace Edge
 
         private void CoreWebView2_DownloadStarting(CoreWebView2 sender, CoreWebView2DownloadStartingEventArgs args)
         {
+            //TODO: 需要换成第三方下载库，发现问题：1、ResultFilePath可能不是最终位置；2、StateChanged事件可能不会触发；3、下载的文件可能一个原始文件名0kb，一个文件名带(1)正常下载完成。更换后开始开发自动安装下载的crx格式浏览器扩展
             Deferral deferral = args.GetDeferral();
 
             System.Threading.SynchronizationContext.Current?.Post(async (_) =>
@@ -352,7 +360,10 @@ namespace Edge
                     string file = await Utilities.WSPSaveFile(Path.GetFileName(args.ResultFilePath), this.GetWindowHandle());
                     if (file is { Length: > 0 })
                     {
-                        args.ResultFilePath = file;
+                        if (file != args.ResultFilePath)
+                        {
+                            args.ResultFilePath = file;
+                        }
                         App.DownloadList.Add(new DownloadObject(args.DownloadOperation));
                         if (App.settings.ShowFlyoutWhenStartDownloading)
                         {

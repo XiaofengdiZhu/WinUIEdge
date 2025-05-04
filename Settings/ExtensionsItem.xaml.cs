@@ -102,7 +102,8 @@ namespace Edge
                     });
                     await new ContentDialog()
                     {
-                        Content = $"{extension.Name} 已添加到 WinUIEdge",
+                        Title = $"{extension.Name} 已添加到 WinUIEdge",
+                        Content = "注意：移动或删除扩展的原始目录，该扩展会被自动移除。",
                         XamlRoot = senderButton.XamlRoot,
                         CloseButtonText = "好的",
                         DefaultButton = ContentDialogButton.Close
@@ -113,7 +114,8 @@ namespace Edge
                 {
                     await new ContentDialog()
                     {
-                        Content = $"加载扩展失败：{exception}",
+                        Title = $"加载扩展失败",
+                        Content = exception,
                         XamlRoot = senderButton.XamlRoot,
                         CloseButtonText = "好的",
                         DefaultButton = ContentDialogButton.Close
@@ -146,7 +148,8 @@ namespace Edge
                     }
                     catch (Exception exception) {
                         await new ContentDialog() {
-                            Content = $"开关扩展失败，原因: {exception}",
+                            Title = "开关扩展失败",
+                            Content = exception,
                             XamlRoot = xamlRoot,
                             CloseButtonText = "好的",
                             DefaultButton = ContentDialogButton.Close
@@ -163,7 +166,8 @@ namespace Edge
                 Extensions.Remove(extensionInfo);
                 await new ContentDialog()
                 {
-                    Content = "开关失败，原因：未找到该扩展",
+                    Title = "开关扩展失败",
+                    Content = "原因：未找到该扩展",
                     XamlRoot = xamlRoot,
                     CloseButtonText = "好的",
                     DefaultButton = ContentDialogButton.Close
@@ -184,7 +188,7 @@ namespace Edge
         {
             if (await new ContentDialog()
                 {
-                    Content = $"是否从 WinUIEdge 中删除 \"{extensionInfo.Name}\"？",
+                    Title = $"是否从 WinUIEdge 中删除 \"{extensionInfo.Name}\"？",
                     PrimaryButtonText = "删除",
                     SecondaryButtonText = "取消",
                     DefaultButton = ContentDialogButton.Primary,
@@ -206,7 +210,8 @@ namespace Edge
                         {
                             await new ContentDialog()
                             {
-                                Content = $"移除失败，原因：{exception}",
+                                Title = "移除扩展失败",
+                                Content = exception,
                                 XamlRoot = xamlRoot,
                                 CloseButtonText = "好的",
                                 DefaultButton = ContentDialogButton.Close
@@ -222,7 +227,8 @@ namespace Edge
                     Extensions.Remove(extensionInfo);
                     await new ContentDialog()
                     {
-                        Content = "移除失败，原因：未找到该扩展",
+                        Title = "移除扩展失败",
+                        Content = "原因：未找到该扩展",
                         XamlRoot = xamlRoot,
                         CloseButtonText = "好的",
                         DefaultButton = ContentDialogButton.Close
