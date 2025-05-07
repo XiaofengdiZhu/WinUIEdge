@@ -45,7 +45,8 @@ namespace Edge
         {
             if (sender is ToggleSwitch { DataContext: BrowserDataKind kind } toggleSwitch)
             {
-                if ((App.settings.ClearBrowsingDataKindsOnExit & (int)kind.Kind) != (toggleSwitch.IsOn ? (int)kind.Kind : 0)) {
+                if ((App.settings.ClearBrowsingDataKindsOnExit & (int)kind.Kind) != (toggleSwitch.IsOn ? (int)kind.Kind : 0))
+                {
                     App.settings.ClearBrowsingDataKindsOnExit ^= (int)kind.Kind;
                 }
             }

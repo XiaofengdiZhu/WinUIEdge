@@ -2,6 +2,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System.Collections.Generic;
 using System;
+using Microsoft.Web.WebView2.Core;
 
 namespace Edge
 {
@@ -29,6 +30,7 @@ namespace Edge
             {
                 int index = appearanceView.SelectedIndex;
                 App.settings.Appearance = themeList[index];
+                App.CoreWebView2Profile.PreferredColorScheme = (CoreWebView2PreferredColorScheme)index;
 
                 foreach (Window window in App.mainWindows)
                 {

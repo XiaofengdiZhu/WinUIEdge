@@ -72,11 +72,12 @@
                 <ColumnDefinition x:Name="rightColumn" Width="0" />
             </Grid.ColumnDefinitions>
 
-            <WebView2 x:Name="WebViewEngine" />
+            <WebView2 x:Name="WebViewEngine" DefaultBackgroundColor="Transparent"/>
             <WebView2
                 x:Name="RightWebView"
                 Visibility="Collapsed"
-                Grid.Column="1" />
+                Grid.Column="1"
+                DefaultBackgroundColor="Transparent"/>
             <controls:GridSplitter
                 Grid.Column="1"
                 Width="16"

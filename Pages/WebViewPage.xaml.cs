@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation;
 
 namespace Edge
@@ -66,6 +65,7 @@ namespace Edge
                 coreWebView2.DOMContentLoaded += CoreWebView2_DOMContentLoaded;
                 coreWebView2.NavigationCompleted += CoreWebView2_NavigationCompleted;
                 coreWebView2.DownloadStarting += CoreWebView2_DownloadStarting;
+                coreWebView2.SaveFileSecurityCheckStarting += CoreWebView2_SaveFileSecurityCheckStarting;
                 coreWebView2.FaviconChanged += CoreWebView2_FaviconChanged;
                 coreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
                 coreWebView2.ScriptDialogOpening += CoreWebView2_ScriptDialogOpening;
@@ -80,6 +80,11 @@ namespace Edge
                 WebView.Source = WebUri;
             }
             WebView.Visibility = Visibility.Visible;
+        }
+
+        void CoreWebView2_SaveFileSecurityCheckStarting(CoreWebView2 sender, CoreWebView2SaveFileSecurityCheckStartingEventArgs args)
+        {
+            args.SuppressDefaultPolicy = true;
         }
 
         private void CoreWebView2_NavigationStarting(CoreWebView2 sender, CoreWebView2NavigationStartingEventArgs args)
@@ -123,7 +128,8 @@ namespace Edge
                 Time = DateTime.Now.ToString(),
                 NavigationId = args.NavigationId
             });
-            if (sender.FaviconUri.Length > 0) {
+            if (sender.FaviconUri.Length > 0)
+            {
                 if (!CachedIconSource.TryGetValue(sender.FaviconUri, out ImageIconSource iconSource))
                 {
                     iconSource = new ImageIconSource()
@@ -347,9 +353,8 @@ namespace Edge
             return item;
         }
 
-        private void CoreWebView2_DownloadStarting(CoreWebView2 sender, CoreWebView2DownloadStartingEventArgs args)
+        private async void CoreWebView2_DownloadStarting(CoreWebView2 sender, CoreWebView2DownloadStartingEventArgs args)
         {
-            //TODO: 需要换成第三方下载库，发现问题：1、ResultFilePath可能不是最终位置；2、StateChanged事件可能不会触发；3、下载的文件可能一个原始文件名0kb，一个文件名带(1)正常下载完成。更换后开始开发自动安装下载的crx格式浏览器扩展
             Deferral deferral = args.GetDeferral();
 
             System.Threading.SynchronizationContext.Current?.Post(async (_) =>
@@ -357,22 +362,29 @@ namespace Edge
                 using (deferral)
                 {
                     args.Handled = true;
-                    string file = await Utilities.WSPSaveFile(Path.GetFileName(args.ResultFilePath), this.GetWindowHandle());
-                    if (file is { Length: > 0 })
+                    if (App.settings.AskDownloadBehavior)
                     {
-                        if (file != args.ResultFilePath)
+                        string file = await Utilities.WSPSaveFile(Path.GetFileName(args.ResultFilePath), this.GetWindowHandle());
+                        if (file is { Length: > 0 })
                         {
-                            args.ResultFilePath = file;
+                            if (file != args.ResultFilePath)
+                            {
+                                args.ResultFilePath = file;
+                            }
+                            App.DownloadModel.AddDownload(args.DownloadOperation);
+                            if (App.settings.ShowFlyoutWhenStartDownloading)
+                            {
+                                ShowFlyout("下载");
+                            }
                         }
-                        App.DownloadList.Add(new DownloadObject(args.DownloadOperation));
-                        if (App.settings.ShowFlyoutWhenStartDownloading)
+                        else
                         {
-                            ShowFlyout("下载");
+                            args.Cancel = true;
                         }
                     }
-                    else
+                    else if (App.settings.ShowFlyoutWhenStartDownloading)
                     {
-                        args.Cancel = true;
+                        ShowFlyout("下载");
                     }
                 }
             }, null);

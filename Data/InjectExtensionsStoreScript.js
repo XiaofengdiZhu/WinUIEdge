@@ -61,31 +61,7 @@ function replaceButton(originalInstallButton){
 
 function addStyle(){
     const styleElement = document.createElement("style");
-    styleElement.innerText = `.injectInstallButton {
-    background-color: var(--colorBrandBackground);
-    border: var(--strokeWidthThin) solid var(--colorNeutralStroke1);
-    border-radius: 4px;
-    box-sizing: border-box;
-    cursor: pointer;
-    font-family: var(--fontFamilyBase);
-    font-size: var(--fontSizeBase300);
-    font-weight: 600;
-    height: fit-content;
-    padding: 0;
-    outline-style: none;
-    transition: background var(--durationFaster) var(--curveEasyEase);
-    &>a {
-        color: var(--colorNeutralForegroundOnBrand);
-        display: block;
-        line-height: var(--lineHeightBase300);
-        padding: 5px var(--spacingHorizontalM);
-        text-decoration: none;
-    }
-    &:hover {
-        background-color: var(--colorBrandBackgroundHover);
-    }
-}
-.replacedInstallButton {
+    styleElement.innerText = `.replacedInstallButton {
     background-color: var(--colorBrandBackground);
     cursor: pointer;
     padding: 0;

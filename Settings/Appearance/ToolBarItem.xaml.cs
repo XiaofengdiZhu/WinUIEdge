@@ -49,9 +49,11 @@ namespace Edge
 
         private void VisualChanged(object sender, RoutedEventArgs e)
         {
-            if (sender is ToggleSwitch { DataContext: ToolBarVisual visual } toggle) {
+            if (sender is ToggleSwitch { DataContext: ToolBarVisual visual } toggle)
+            {
                 Dictionary<string, bool> toolbar = App.settings.ToolBar;
-                if (toolbar.TryGetValue(visual.Text, out bool oldValue) && oldValue != toggle.IsOn) {
+                if (toolbar.TryGetValue(visual.Text, out bool oldValue) && oldValue != toggle.IsOn)
+                {
                     toolbar[visual.Text] = !oldValue;
                     visual.Visual = !oldValue;
                 }

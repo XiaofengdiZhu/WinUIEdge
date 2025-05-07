@@ -59,7 +59,8 @@ namespace Edge
                 if (Extensions.All(x => x.Id != extension.Id))
                 {
                     string optionUriSuffix = ExtensionOptionUriSuffixes.GetValueOrDefault(extension.Name, null);
-                    Extensions.Add(new ExtensionInfo() {
+                    Extensions.Add(new ExtensionInfo()
+                    {
                         Name = extension.Name,
                         Id = extension.Id,
                         IsEnabled = extension.IsEnabled,
@@ -146,8 +147,10 @@ namespace Edge
                     {
                         await extension.EnableAsync(extension.IsEnabled ? false : true);
                     }
-                    catch (Exception exception) {
-                        await new ContentDialog() {
+                    catch (Exception exception)
+                    {
+                        await new ContentDialog()
+                        {
                             Title = "开关扩展失败",
                             Content = exception,
                             XamlRoot = xamlRoot,
@@ -178,7 +181,8 @@ namespace Edge
 
         private void RemoveExtension(object sender, RoutedEventArgs e)
         {
-            if (sender is Button { DataContext: ExtensionInfo extensionInfo }) {
+            if (sender is Button { DataContext: ExtensionInfo extensionInfo })
+            {
                 ExtensionsRemoveAsync(extensionInfo, this.XamlRoot);
             }
         }
@@ -198,7 +202,8 @@ namespace Edge
             {
                 IReadOnlyList<CoreWebView2BrowserExtension> extensions = await App.CoreWebView2Profile.GetBrowserExtensionsAsync();
                 bool found = false;
-                foreach (CoreWebView2BrowserExtension extension in extensions) {
+                foreach (CoreWebView2BrowserExtension extension in extensions)
+                {
                     if (extension.Id == extensionInfo.Id)
                     {
                         try
@@ -240,7 +245,8 @@ namespace Edge
 
         private void OpenExtensionOption(object sender, RoutedEventArgs e)
         {
-            if (sender is Button { DataContext: ExtensionInfo { OptionUri: not null } extensionInfo }) {
+            if (sender is Button { DataContext: ExtensionInfo { OptionUri: not null } extensionInfo })
+            {
                 MainWindow mainWindow = App.GetWindowForElement(this);
                 mainWindow.AddNewTab(new WebViewPage(new Uri(extensionInfo.OptionUri)));
             }

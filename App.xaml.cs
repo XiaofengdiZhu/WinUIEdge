@@ -23,7 +23,7 @@ namespace Edge
         public static CoreWebView2Environment CoreWebView2Environment;
         public static CoreWebView2Profile CoreWebView2Profile;
         public static ObservableCollection<WebViewHistory> Histories = [];
-        public static ObservableCollection<DownloadObject> DownloadList = [];
+        public static DownloadModel DownloadModel =  new();
         public static WordSearchEngine searchEngine;
         public static bool NeedRestartEnvironment;
 
@@ -58,6 +58,7 @@ namespace Edge
             await WebView2.EnsureCoreWebView2Async(CoreWebView2Environment);
             CoreWebView2Profile = WebView2.CoreWebView2.Profile;
             CoreWebView2Profile.PreferredTrackingPreventionLevel = (CoreWebView2TrackingPreventionLevel)App.settings.PreferredTrackingPreventionLevel;
+            CoreWebView2Profile.PreferredColorScheme = (CoreWebView2PreferredColorScheme)Enum.Parse<ElementTheme>(settings.Appearance);
         }
 
         private void BrowserProcessExited(CoreWebView2Environment sender, CoreWebView2BrowserProcessExitedEventArgs args)
