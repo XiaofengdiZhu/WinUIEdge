@@ -382,9 +382,13 @@ namespace Edge
                             args.Cancel = true;
                         }
                     }
-                    else if (App.settings.ShowFlyoutWhenStartDownloading)
+                    else
                     {
-                        ShowFlyout("下载");
+                        App.DownloadModel.AddDownload(args.DownloadOperation);
+                        if (App.settings.ShowFlyoutWhenStartDownloading)
+                        {
+                            ShowFlyout("下载");
+                        }
                     }
                 }
             }, null);

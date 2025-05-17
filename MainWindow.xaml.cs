@@ -9,6 +9,7 @@ using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.UI.Shell;
 using Microsoft.UI;
+using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 
 
@@ -342,6 +343,52 @@ namespace Edge
         {
             TaskManager taskManager = new();
             taskManager.Activate();
+        }
+
+        // From WinUI 3 Gallery
+        private void NavigateToNumberedTabKeyboardAccelerator_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+        {
+            int tabToSelect = 0;
+
+            switch (sender.Key)
+            {
+                case Windows.System.VirtualKey.Number1:
+                    tabToSelect = 0;
+                    break;
+                case Windows.System.VirtualKey.Number2:
+                    tabToSelect = 1;
+                    break;
+                case Windows.System.VirtualKey.Number3:
+                    tabToSelect = 2;
+                    break;
+                case Windows.System.VirtualKey.Number4:
+                    tabToSelect = 3;
+                    break;
+                case Windows.System.VirtualKey.Number5:
+                    tabToSelect = 4;
+                    break;
+                case Windows.System.VirtualKey.Number6:
+                    tabToSelect = 5;
+                    break;
+                case Windows.System.VirtualKey.Number7:
+                    tabToSelect = 6;
+                    break;
+                case Windows.System.VirtualKey.Number8:
+                    tabToSelect = 7;
+                    break;
+                case Windows.System.VirtualKey.Number9:
+                    // Select the last tab
+                    tabToSelect = tabView.TabItems.Count - 1;
+                    break;
+            }
+
+            // Only select the tab if it is in the list
+            if (tabToSelect < tabView.TabItems.Count)
+            {
+                tabView.SelectedIndex = tabToSelect;
+            }
+
+            args.Handled = true;
         }
     }
 }
