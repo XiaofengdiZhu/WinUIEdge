@@ -145,7 +145,7 @@ namespace Edge
                 {
                     try
                     {
-                        await extension.EnableAsync(extension.IsEnabled ? false : true);
+                        await extension.EnableAsync(!extension.IsEnabled);
                     }
                     catch (Exception exception)
                     {
